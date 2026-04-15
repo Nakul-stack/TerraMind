@@ -1,4 +1,4 @@
-# TerraMind Pre-Sowing Advisor — Backend Requirements
+# Lightweight dependencies for Render web service (core backend endpoints)
 fastapi>=0.100.0
 uvicorn[standard]>=0.20.0
 slowapi>=0.1.9

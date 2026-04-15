@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: terramind-backend
+    env: python
+    plan: free
+    rootDir: .
+    buildCommand: pip install -r backend/requirements-render.txt
+    startCommand: uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: TERRAMIND_HOST
+        value: 0.0.0.0
+      - key: TERRAMIND_ENABLE_DIAGNOSIS
+        value: "false"
+      - key: TERRAMIND_ENABLE_CHATBOT
+        value: "false"
+      - key: TERRAMIND_ENABLE_GRAPH_RAG
+        value: "false"
