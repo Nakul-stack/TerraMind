@@ -102,6 +102,14 @@ def run_standard_pipeline(payload: Any) -> Dict[str, Any]:
         }
         yield_result = predict_yield(yield_input)
         logger.info("Yield Predictor → %.4f t/ha", yield_result["expected_yield"])
+    except FileNotFoundError:
+        logger.warning("Yield model artifact missing; returning graceful fallback")
+        yield_result = {
+            "expected_yield": 0.0,
+            "unit": "t/ha",
+            "confidence_band": {"lower": 0.0, "upper": 0.0},
+            "explanation": "Yield prediction is temporarily unavailable in this deployment.",
+        }
     except Exception as e:
         logger.error("Yield prediction failed: %s", e)
         yield_result = {
@@ -110,7 +118,7 @@ def run_standard_pipeline(payload: Any) -> Dict[str, Any]:
             "confidence_band": {"lower": 0.0, "upper": 0.0},
             "explanation": f"Yield prediction unavailable: {e}",
         }
-        system_notes.append(f"Yield prediction error: {e}")
+        system_notes.append("Yield prediction is temporarily unavailable.")
 
     # ── Step 4: Pre-Sowing Advisor ────────────────────────────────────
     try:
@@ -161,7 +169,7 @@ def run_standard_pipeline(payload: Any) -> Dict[str, Any]:
             "crop_irrigated_area_percent": None,
             "notes": [str(e)],
         }
-        system_notes.append(f"District intelligence error: {e}")
+        system_notes.append("District intelligence is temporarily unavailable.")
 
     # ── Step 6: Apply Irrigation Prior ─────────────────────────────────────
     try:

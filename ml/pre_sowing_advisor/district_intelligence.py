@@ -691,63 +691,78 @@ def get_district_intelligence(
         • "District irrigation infrastructure: dominated by …"
         • "Historical irrigated-area % for this crop: X%"
     """
-    state = normalize_state_name(state)
-    district = normalize_district_name(district)
-    crop_norm = normalize_crop_name(crop)
+    try:
+        state = normalize_state_name(state)
+        district = normalize_district_name(district)
+        crop_norm = normalize_crop_name(crop)
 
-    notes: List[str] = []
-    insights: List[str] = []
+        notes: List[str] = []
+        insights: List[str] = []
 
-    # 1. Crop area share
-    share_pct, share_note = _crop_area_share_icrisat(state, district, crop_norm)
-    if share_pct is not None:
-        insights.append(share_note)
-    else:
-        notes.append(share_note)
+        # 1. Crop area share
+        share_pct, share_note = _crop_area_share_icrisat(state, district, crop_norm)
+        if share_pct is not None:
+            insights.append(share_note)
+        else:
+            notes.append(share_note)
 
-    # 2. Yield trend
-    trend, trend_note = _yield_trend_icrisat(state, district, crop_norm)
-    insights.append(trend_note)
+        # 2. Yield trend
+        trend, trend_note = _yield_trend_icrisat(state, district, crop_norm)
+        insights.append(trend_note)
 
-    # 3. Competing crops
-    competitors, comp_note = _top_competing_crops_icrisat(state, district, crop_norm)
-    if competitors:
-        insights.append(comp_note)
-    else:
-        notes.append(comp_note)
+        # 3. Competing crops
+        competitors, comp_note = _top_competing_crops_icrisat(state, district, crop_norm)
+        if competitors:
+            insights.append(comp_note)
+        else:
+            notes.append(comp_note)
 
-    # 4. Best historical season
-    best_season, season_note = _best_historical_season(state, district, crop_norm)
-    insights.append(season_note)
+        # 4. Best historical season
+        best_season, season_note = _best_historical_season(state, district, crop_norm)
+        insights.append(season_note)
 
-    # 5. 10-year trajectory
-    trajectory = _ten_year_trajectory_icrisat(state, district, crop_norm)
-    insights.append(trajectory)
+        # 5. 10-year trajectory
+        trajectory = _ten_year_trajectory_icrisat(state, district, crop_norm)
+        insights.append(trajectory)
 
-    # 6. Irrigation infrastructure
-    infra_summary, infra_breakdown = _irrigation_infrastructure_summary(state, district)
-    insights.append(f"Irrigation infrastructure: {infra_summary}")
+        # 6. Irrigation infrastructure
+        infra_summary, infra_breakdown = _irrigation_infrastructure_summary(state, district)
+        insights.append(f"Irrigation infrastructure: {infra_summary}")
 
-    # 7. Crop irrigated area %
-    irr_pct, irr_note = _crop_irrigated_area_pct(state, district, crop_norm)
-    if irr_pct is not None:
-        insights.append(irr_note)
-    else:
-        notes.append(irr_note)
+        # 7. Crop irrigated area %
+        irr_pct, irr_note = _crop_irrigated_area_pct(state, district, crop_norm)
+        if irr_pct is not None:
+            insights.append(irr_note)
+        else:
+            notes.append(irr_note)
 
-    result: Dict[str, Any] = {
-        "district_crop_share_percent": share_pct,
-        "yield_trend": trend,
-        "top_competing_crops": competitors,
-        "best_historical_season": best_season,
-        "ten_year_trajectory_summary": trajectory,
-        "irrigation_infrastructure_summary": infra_summary,
-        "irrigation_infrastructure_breakdown": infra_breakdown,
-        "crop_irrigated_area_percent": irr_pct,
-        "insights": insights,
-        "notes": notes,
-    }
+        result: Dict[str, Any] = {
+            "district_crop_share_percent": share_pct,
+            "yield_trend": trend,
+            "top_competing_crops": competitors,
+            "best_historical_season": best_season,
+            "ten_year_trajectory_summary": trajectory,
+            "irrigation_infrastructure_summary": infra_summary,
+            "irrigation_infrastructure_breakdown": infra_breakdown,
+            "crop_irrigated_area_percent": irr_pct,
+            "insights": insights,
+            "notes": notes,
+        }
 
-    logger.info("District intelligence generated for %s/%s/%s: %d insights, %d notes",
-                state, district, crop_norm, len(insights), len(notes))
-    return result
+        logger.info("District intelligence generated for %s/%s/%s: %d insights, %d notes",
+                    state, district, crop_norm, len(insights), len(notes))
+        return result
+    except Exception as exc:
+        logger.warning("District intelligence fallback due to runtime error: %s", exc)
+        return {
+            "district_crop_share_percent": None,
+            "yield_trend": "unavailable",
+            "top_competing_crops": [],
+            "best_historical_season": "unknown",
+            "ten_year_trajectory_summary": "District intelligence unavailable.",
+            "irrigation_infrastructure_summary": "Unavailable.",
+            "irrigation_infrastructure_breakdown": {},
+            "crop_irrigated_area_percent": None,
+            "insights": [],
+            "notes": ["District intelligence data unavailable in this deployment."],
+        }
