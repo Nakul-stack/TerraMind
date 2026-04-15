@@ -1,0 +1,41 @@
+{
+  "model_name": "pre_sowing_advisor",
+  "trained_at": "2026-04-14T20:26:07.151083+00:00",
+  "dataset": "irrigation_prediction.csv",
+  "features": [
+    "ph",
+    "temperature",
+    "humidity",
+    "rainfall",
+    "crop",
+    "soil_type",
+    "season"
+  ],
+  "engineered_features": [
+    "temp_rainfall_ratio",
+    "humidity_rainfall",
+    "rainfall_log",
+    "temp_humidity_interaction"
+  ],
+  "targets": [
+    "sunlight_hours",
+    "irrigation_type",
+    "irrigation_need"
+  ],
+  "model_types": {
+    "sunlight_hours": "GradientBoostingRegressor",
+    "irrigation_type": "GradientBoosting",
+    "irrigation_need": "GradientBoosting"
+  },
+  "metrics": {
+    "sunlight_test_r2": 0.9662,
+    "sunlight_test_mae": 0.3959,
+    "sunlight_test_rmse": 0.4994,
+    "irr_type_test_acc": 0.4295,
+    "irr_type_test_f1": 0.4302,
+    "irr_type_test_macro_recall": 0.4282,
+    "irr_need_test_acc": 0.7985,
+    "irr_need_test_f1": 0.7978,
+    "irr_need_test_macro_recall": 0.7757
+  }
+}

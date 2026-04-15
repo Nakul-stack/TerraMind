@@ -1,0 +1,11 @@
+flwr==1.9.0
+torch==2.3.1
+torchvision==0.18.1
+opacus==1.5.2
+matplotlib==3.9.0
+scikit-learn==1.5.1
+pandas==2.2.2
+numpy==1.26.4
+openpyxl==3.1.5
+tqdm==4.66.4
+joblib==1.4.2

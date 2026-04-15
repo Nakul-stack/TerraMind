@@ -1,0 +1,44 @@
+{
+  "pest_level": {
+    "val_accuracy": 0.3335,
+    "val_precision": 0.33345949834786337,
+    "val_recall": 0.3335,
+    "val_f1": 0.3332428598688282,
+    "type": "classification",
+    "train_accuracy": 0.94875,
+    "health": "OVERFIT"
+  },
+  "recommended_fertilizer": {
+    "val_accuracy": 1.0,
+    "val_precision": 1.0,
+    "val_recall": 1.0,
+    "val_f1": 1.0,
+    "type": "classification",
+    "train_accuracy": 1.0,
+    "health": "HEALTHY"
+  },
+  "dosage": {
+    "val_r2": 0.9447842337555024,
+    "val_mae": 3.1187161520158666,
+    "val_rmse": 3.859838872273472,
+    "type": "regression",
+    "train_r2": 0.9980071942589367,
+    "health": "HEALTHY"
+  },
+  "apply_after_days": {
+    "val_r2": 0.6987482923517154,
+    "val_mae": 3.7311255702279524,
+    "val_rmse": 4.3825600421295015,
+    "type": "regression",
+    "train_r2": 0.9620750983251618,
+    "health": "OVERFIT"
+  },
+  "expected_yield_after_dosage": {
+    "val_r2": 0.4026097897920715,
+    "val_mae": 8.90367941799484,
+    "val_rmse": 10.518457566277835,
+    "type": "regression",
+    "train_r2": 0.9312968038087673,
+    "health": "OVERFIT"
+  }
+}

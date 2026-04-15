@@ -1,0 +1,47 @@
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.venv/
+venv/
+
+# Node/frontend
+node_modules/
+frontend/node_modules/
+frontend/dist/
+
+# Build/cache/log outputs
+logs/
+*.log
+error.log
+train_log.txt
+training_output*.txt
+visualize_output.txt
+*.tmp
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+frontend/.env
+frontend/.env.*
+!frontend/.env.example
+backend/.env
+backend/.env.*
+!backend/.env.example
+
+# Model/data artifacts (local/generated)
+backend/artifacts/
+trained_artifacts_fast/
+ml/pre_sowing_advisor/yield_prediction/saved_models/model.pkl
+
+# Local user files
+*.crdownload

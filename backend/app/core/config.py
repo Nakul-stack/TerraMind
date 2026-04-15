@@ -1,0 +1,57 @@
+"""
+TerraMind Chatbot - Configuration
+==================================
+All chatbot / RAG settings live here so they can be changed in one place.
+Values are read from environment variables when available, falling back to
+sensible defaults that work on modest local hardware (i7-11 / MX330 / 32 GB).
+"""
+
+import os
+from pathlib import Path
+
+# ── Paths ────────────────────────────────────────────────────────────────────
+# Project root is two levels above this file: backend/app/core/config.py -> project root
+_PROJECT_ROOT = Path(__file__).resolve().parents[3]
+
+PDF_FOLDER_PATH: str = os.getenv(
+    "TERRAMIND_PDF_FOLDER",
+    str(_PROJECT_ROOT / "chatbot"),
+)
+
+VECTOR_STORE_DIR: str = os.getenv(
+    "TERRAMIND_VECTOR_STORE_DIR",
+    str(Path(__file__).resolve().parents[1] / "chatbot" / "storage"),
+)
+
+# ── Embedding model ─────────────────────────────────────────────────────────
+# all-MiniLM-L6-v2: 80 MB, 384-dim, top-tier for its size on MTEB benchmarks.
+# Runs entirely on CPU - no GPU required.
+EMBEDDING_MODEL_NAME: str = os.getenv(
+    "TERRAMIND_EMBEDDING_MODEL",
+    "all-MiniLM-L6-v2",
+)
+
+# ── Ollama / LLM ────────────────────────────────────────────────────────────
+# qwen2.5:1.5b - ~1.1 GB download, ~1.5 GB RAM at runtime.
+# 15-25 tok/s on i7 CPU.  Perfect for rewriting retrieved context.
+OLLAMA_BASE_URL: str = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+OLLAMA_MODEL_NAME: str = os.getenv("OLLAMA_MODEL_NAME", "qwen2.5:1.5b")
+
+# ── Chunking ─────────────────────────────────────────────────────────────────
+# 500-char chunks with 50-char overlap keeps retrieval precise while giving
+# the small LLM enough context per chunk without blowing up the prompt.
+CHUNK_SIZE: int = int(os.getenv("TERRAMIND_CHUNK_SIZE", "500"))
+CHUNK_OVERLAP: int = int(os.getenv("TERRAMIND_CHUNK_OVERLAP", "50"))
+
+# ── Retrieval ────────────────────────────────────────────────────────────────
+RETRIEVAL_TOP_K: int = int(os.getenv("TERRAMIND_TOP_K", "5"))
+MAX_CONTEXT_CHUNKS: int = int(os.getenv("TERRAMIND_MAX_CONTEXT_CHUNKS", "5"))
+
+# Cosine-similarity floor.  Chunks scoring below this are considered
+# irrelevant and the chatbot will refuse to answer.
+SIMILARITY_THRESHOLD: float = float(os.getenv("TERRAMIND_SIM_THRESHOLD", "0.35"))
+
+# ── Ollama generation parameters ────────────────────────────────────────────
+OLLAMA_TEMPERATURE: float = float(os.getenv("OLLAMA_TEMPERATURE", "0.3"))
+OLLAMA_NUM_CTX: int = int(os.getenv("OLLAMA_NUM_CTX", "4096"))
+OLLAMA_TIMEOUT_SECONDS: int = int(os.getenv("OLLAMA_TIMEOUT", "120"))

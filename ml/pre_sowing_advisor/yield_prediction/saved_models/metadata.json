@@ -1,0 +1,26 @@
+{
+  "model_name": "yield_predictor",
+  "model_type": "RandomForest",
+  "trained_at": "2026-04-14T19:47:32.619265+00:00",
+  "datasets": [
+    "crop_production.csv.xlsx",
+    "India Agriculture Crop Production.csv"
+  ],
+  "features": [
+    "crop",
+    "state",
+    "district",
+    "season"
+  ],
+  "target": "yield",
+  "residual_std": 0.6088503573633802,
+  "confidence_multiplier": 1.5,
+  "metrics": {
+    "train_r2": 0.8524,
+    "train_mae": 0.3451,
+    "train_rmse": 0.6089,
+    "test_r2": 0.8235,
+    "test_mae": 0.3749,
+    "test_rmse": 0.6701
+  }
+}

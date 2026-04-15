@@ -1,0 +1,51 @@
+{
+  "module": "During Growth Monitor",
+  "trained_at": "2026-04-02T23:09:36.412866+00:00",
+  "training_time_seconds": 21.1,
+  "dataset_file": "D:\\Cloud\\TerraMind-Smarter-Farming-Every-Stage\\dataset during growth\\fertilizer_giant_training_dataset.csv",
+  "train_samples": 8000,
+  "val_samples": 2000,
+  "n_features_raw": 10,
+  "n_features_transformed": 22,
+  "targets": [
+    "pest_level",
+    "recommended_fertilizer",
+    "dosage",
+    "apply_after_days",
+    "expected_yield_after_dosage"
+  ],
+  "models": {
+    "pest_level": "RandomForestClassifier",
+    "recommended_fertilizer": "RandomForestClassifier",
+    "dosage": "GradientBoostingRegressor",
+    "apply_after_days": "GradientBoostingRegressor",
+    "expected_yield_after_dosage": "GradientBoostingRegressor"
+  },
+  "summary": {
+    "pest_level": {
+      "health": "OVERFIT",
+      "val_accuracy": 0.322,
+      "val_f1": 0.3217160279288189
+    },
+    "recommended_fertilizer": {
+      "health": "HEALTHY",
+      "val_accuracy": 1.0,
+      "val_f1": 1.0
+    },
+    "dosage": {
+      "health": "HEALTHY",
+      "val_r2": 0.9501476162185364,
+      "val_mae": 2.948847757996367
+    },
+    "apply_after_days": {
+      "health": "OVERFIT",
+      "val_r2": 0.6815894343089142,
+      "val_mae": 3.7624147599746722
+    },
+    "expected_yield_after_dosage": {
+      "health": "OVERFIT",
+      "val_r2": 0.39797935299410003,
+      "val_mae": 8.862968500003346
+    }
+  }
+}

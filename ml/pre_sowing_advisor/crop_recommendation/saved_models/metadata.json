@@ -1,0 +1,132 @@
+{
+  "model_name": "crop_recommender",
+  "model_type": "RandomForest",
+  "trained_at": "2026-04-14T20:14:40.528110+00:00",
+  "dataset": "crop_dataset_rebuilt.csv",
+  "features": [
+    "N",
+    "P",
+    "K",
+    "temperature",
+    "humidity",
+    "ph",
+    "rainfall"
+  ],
+  "target": "label",
+  "classes": [
+    "barley",
+    "cotton",
+    "groundnut",
+    "maize",
+    "millets",
+    "pulses",
+    "rice",
+    "sugarcane",
+    "tobacco",
+    "wheat"
+  ],
+  "n_classes": 10,
+  "comparison_metrics": {
+    "RandomForest": {
+      "train_accuracy": 1.0,
+      "val_accuracy": 1.0,
+      "val_top3_accuracy": 1.0
+    },
+    "GradientBoosting": {
+      "train_accuracy": 1.0,
+      "val_accuracy": 0.9987,
+      "val_top3_accuracy": 1.0
+    }
+  },
+  "test_metrics": {
+    "test_accuracy": 1.0,
+    "test_top3_accuracy": 1.0,
+    "classification_report": {
+      "barley": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 140.0
+      },
+      "cotton": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 140.0
+      },
+      "groundnut": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 140.0
+      },
+      "maize": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 140.0
+      },
+      "millets": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 140.0
+      },
+      "pulses": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 140.0
+      },
+      "rice": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 280.0
+      },
+      "sugarcane": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 140.0
+      },
+      "tobacco": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 140.0
+      },
+      "wheat": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 140.0
+      },
+      "accuracy": 1.0,
+      "macro avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 1540.0
+      },
+      "weighted avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 1540.0
+      }
+    },
+    "feature_importances": {
+      "K": 0.1833,
+      "humidity": 0.1716,
+      "N": 0.1671,
+      "P": 0.1332,
+      "NP_ratio": 0.0944,
+      "rainfall": 0.0832,
+      "rainfall_humidity": 0.0724,
+      "KP_ratio": 0.0508,
+      "temperature": 0.0361,
+      "ph": 0.0079
+    }
+  }
+}

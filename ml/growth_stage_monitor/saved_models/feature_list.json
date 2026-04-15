@@ -1,0 +1,26 @@
+{
+  "features": [
+    "num__temperature",
+    "num__humidity",
+    "num__moisture",
+    "num__N",
+    "num__P",
+    "num__K",
+    "num__ph",
+    "num__rainfall",
+    "cat__soil_type_Black",
+    "cat__soil_type_Clayey",
+    "cat__soil_type_Loamy",
+    "cat__soil_type_Red",
+    "cat__soil_type_Sandy",
+    "cat__crop_type_Cotton",
+    "cat__crop_type_Groundnut",
+    "cat__crop_type_Maize",
+    "cat__crop_type_Pulses",
+    "cat__crop_type_Rice",
+    "cat__crop_type_Soybean",
+    "cat__crop_type_Sugarcane",
+    "cat__crop_type_Tomato",
+    "cat__crop_type_Wheat"
+  ]
+}
