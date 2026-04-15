@@ -41,7 +41,6 @@ backend/.env.*
 # Model/data artifacts (local/generated)
 backend/artifacts/
 trained_artifacts_fast/
-ml/pre_sowing_advisor/yield_prediction/saved_models/model.pkl
 
 # Local user files
 *.crdownload

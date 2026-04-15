@@ -6,7 +6,6 @@ Wires all routers, configures CORS, and provides health endpoint.
 from __future__ import annotations
 
 import json
-import os
 import sys
 from pathlib import Path
 
@@ -27,8 +26,10 @@ from backend.api.routes_sync      import router as sync_router
 from backend.api.routes_benchmark import router as benchmark_router
 
 # v1 Integration Routers
-from backend.app.api.v1.advisor import router as advisor_v1
-from backend.app.api.v1.monitor import router as monitor_v1
+from backend.app.api.v1.advisor   import router as advisor_v1
+from backend.app.api.v1.monitor   import router as monitor_v1
+from backend.app.api.v1.diagnosis import router as diagnosis_v1
+from backend.app.api.v1.chatbot   import router as chatbot_v1
 from backend.app.api.v1.architecture import router as architecture_v1
 
 from backend.core.logging_config import log
@@ -61,36 +62,13 @@ app.include_router(benchmark_router)
 # Unified v1 Suite
 app.include_router(advisor_v1,   prefix="/api/v1/advisor",   tags=["v1-advisor"])
 app.include_router(monitor_v1,   prefix="/api/v1/monitor",   tags=["v1-monitor"])
+app.include_router(diagnosis_v1, prefix="/api/v1/diagnosis", tags=["v1-diagnosis"])
+app.include_router(chatbot_v1,   prefix="/api/v1/chatbot",   tags=["v1-chatbot"])
 app.include_router(architecture_v1, prefix="/api/v1/architecture", tags=["v1-architecture"])
 
-# Optional heavy modules can be disabled for lightweight cloud deploys.
-ENABLE_DIAGNOSIS = os.getenv("TERRAMIND_ENABLE_DIAGNOSIS", "true").lower() in {"1", "true", "yes", "on"}
-ENABLE_CHATBOT = os.getenv("TERRAMIND_ENABLE_CHATBOT", "true").lower() in {"1", "true", "yes", "on"}
-ENABLE_GRAPH_RAG = os.getenv("TERRAMIND_ENABLE_GRAPH_RAG", "true").lower() in {"1", "true", "yes", "on"}
-
-if ENABLE_DIAGNOSIS:
-    try:
-        from backend.app.api.v1.diagnosis import router as diagnosis_v1
-
-        app.include_router(diagnosis_v1, prefix="/api/v1/diagnosis", tags=["v1-diagnosis"])
-    except Exception as exc:
-        log.warning("Diagnosis module disabled due to import/startup error: %s", exc)
-
-if ENABLE_CHATBOT:
-    try:
-        from backend.app.api.v1.chatbot import router as chatbot_v1
-
-        app.include_router(chatbot_v1, prefix="/api/v1/chatbot", tags=["v1-chatbot"])
-    except Exception as exc:
-        log.warning("Chatbot module disabled due to import/startup error: %s", exc)
-
-if ENABLE_GRAPH_RAG:
-    try:
-        from backend.app.api.v1.graph_rag import router as graph_rag_v1
-
-        app.include_router(graph_rag_v1, prefix="/api/v1/graph-rag", tags=["v1-graph-rag"])
-    except Exception as exc:
-        log.warning("Graph RAG module disabled due to import/startup error: %s", exc)
+# Graph RAG integration
+from backend.app.api.v1.graph_rag import router as graph_rag_v1
+app.include_router(graph_rag_v1, prefix="/api/v1/graph-rag", tags=["v1-graph-rag"])
 
 
 # ── Health & utility endpoints ──────────────────────────────────────────
