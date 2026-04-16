@@ -220,3 +220,37 @@ scripts/benchmark_all.bat
 - [ ] Multilingual support (Hindi, regional languages)
 - [ ] ONNX export for mobile inference
 - [ ] Real-time weather API integration
+
+---
+
+## Deploy On Render
+
+This repository includes a Render Blueprint config at [render.yaml](render.yaml).
+
+### 1. Push latest code to GitHub
+- Ensure your latest branch includes `render.yaml`.
+
+### 2. Create Blueprint in Render
+- In Render dashboard: `New` -> `Blueprint`.
+- Connect your GitHub repo and select this project.
+- Render will detect `render.yaml` and create:
+  - `terramind-backend` (FastAPI web service)
+  - `terramind-frontend` (static site)
+
+### 3. Set required secret
+- In backend service env vars, set:
+  - `OPENROUTER_API_KEY` = your OpenRouter key
+
+### 4. Update frontend API URL (if service name differs)
+- `render.yaml` frontend build uses:
+  - `VITE_API_BASE_URL=https://terramind-backend.onrender.com`
+- If your backend URL is different, update this value in `render.yaml` and redeploy.
+
+### 5. Verify deployment
+- Backend health: `https://<your-backend>.onrender.com/health`
+- Graph RAG health: `https://<your-backend>.onrender.com/api/v1/graph-rag/health`
+- Frontend should load and call backend routes under `/api/v1/*`.
+
+### Notes
+- Render free services may sleep when idle; first request can be slow.
+- If your chatbot index relies on local PDFs, ensure those files are in repo (or mount persistent storage and rebuild index).
