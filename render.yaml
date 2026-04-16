@@ -4,7 +4,18 @@ services:
     env: python
     plan: free
     rootDir: .
-    buildCommand: pip install -r backend/requirements.txt && bash scripts/train_all.sh && python -m backend.utils.cache_builder && bash scripts/build_edge_assets.sh
+    buildCommand: >
+      pip install -r backend/requirements.txt &&
+      if [ -f "dataset before sowing/crop_dataset_rebuilt.csv" ] &&
+         [ -f "dataset before sowing/India Agriculture Crop Production.csv" ] &&
+         [ -f "dataset before sowing/irrigation_prediction.csv" ];
+      then
+        bash scripts/train_all.sh &&
+        python -m backend.utils.cache_builder &&
+        bash scripts/build_edge_assets.sh;
+      else
+        echo "Datasets not found on Render build environment. Skipping training/cache build and using fallback runtime mode.";
+      fi
     startCommand: python -m uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT --loop asyncio
     healthCheckPath: /health
     autoDeploy: true
