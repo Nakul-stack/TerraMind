@@ -3,10 +3,14 @@ services:
     name: terramind-backend
     env: python
     plan: free
+    rootDir: .
     buildCommand: pip install -r backend/requirements.txt
-    startCommand: PYTHONPATH=backend uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT
+    startCommand: python -m uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT --loop asyncio
+    healthCheckPath: /health
     autoDeploy: true
     envVars:
+      - key: PYTHONPATH
+        value: backend
       - key: OPENROUTER_API_KEY
         sync: false
       - key: OPENROUTER_MODEL_NAME
