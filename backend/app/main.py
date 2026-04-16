@@ -19,6 +19,8 @@ for path in [PROJECT_ROOT, BACKEND_ROOT]:
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 from backend.api.routes_predict   import router as predict_router
 from backend.api.routes_train     import router as train_router
@@ -69,6 +71,42 @@ app.include_router(architecture_v1, prefix="/api/v1/architecture", tags=["v1-arc
 # Graph RAG integration
 from backend.app.api.v1.graph_rag import router as graph_rag_v1
 app.include_router(graph_rag_v1, prefix="/api/v1/graph-rag", tags=["v1-graph-rag"])
+
+
+# Serve prebuilt frontend (if available) so a single container can host UI + API.
+FRONTEND_DIST = PROJECT_ROOT / "frontend" / "dist"
+if FRONTEND_DIST.exists():
+    assets_dir = FRONTEND_DIST / "assets"
+    if assets_dir.exists():
+        app.mount("/assets", StaticFiles(directory=str(assets_dir)), name="frontend-assets")
+
+    @app.get("/", include_in_schema=False)
+    async def spa_index():
+        return FileResponse(str(FRONTEND_DIST / "index.html"))
+
+    @app.get("/{full_path:path}", include_in_schema=False)
+    async def spa_fallback(full_path: str):
+        # Keep API and docs paths untouched.
+        passthrough_prefixes = (
+            "api/",
+            "predict",
+            "train/",
+            "benchmark/",
+            "sync/",
+            "metadata",
+            "health",
+            "docs",
+            "redoc",
+            "openapi.json",
+        )
+        if full_path.startswith(passthrough_prefixes):
+            from fastapi import HTTPException
+            raise HTTPException(status_code=404, detail="Not Found")
+
+        candidate = FRONTEND_DIST / full_path
+        if candidate.exists() and candidate.is_file():
+            return FileResponse(str(candidate))
+        return FileResponse(str(FRONTEND_DIST / "index.html"))
 
 
 # ── Health & utility endpoints ──────────────────────────────────────────
