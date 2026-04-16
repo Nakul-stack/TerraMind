@@ -7,6 +7,7 @@ POST /api/v1/chatbot/rebuild    - trigger index rebuild
 """
 
 import logging
+from pathlib import Path
 
 from fastapi import APIRouter, HTTPException, status, Request
 from backend.app.core.rate_limit import limiter
@@ -20,6 +21,7 @@ from backend.app.schemas.chatbot import (
 from backend.app.chatbot import document_registry
 from backend.app.chatbot.client import is_available as llm_available
 from backend.app.core.config import OPENROUTER_MODEL_NAME
+from backend.app.core.config import PDF_FOLDER_PATH
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -113,6 +115,17 @@ def chatbot_status():
 def rebuild_index(request: Request):
     logger.info("Index rebuild requested via API.")
     try:
+        pdf_dir = Path(PDF_FOLDER_PATH)
+        pdf_count = len(list(pdf_dir.glob("*.pdf"))) if pdf_dir.exists() else 0
+        if not pdf_dir.exists() or pdf_count == 0:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=(
+                    "Cannot rebuild chatbot index because source PDFs are missing. "
+                    f"Expected one or more .pdf files in: {pdf_dir}"
+                ),
+            )
+
         # Run the build pipeline
         from backend.app.chatbot.ingestion.build_index import main as build_main
         build_main()
