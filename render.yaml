@@ -32,7 +32,8 @@ services:
       - key: TERRAMIND_PORT
         value: "10000"
 
-  - type: static_site
+  - type: web
+    env: static
     name: terramind-frontend
     rootDir: frontend
     buildCommand: npm install && VITE_API_BASE_URL=https://terramind-backend.onrender.com npm run build
