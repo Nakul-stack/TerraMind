@@ -4,7 +4,7 @@ services:
     env: python
     plan: free
     rootDir: .
-    buildCommand: pip install -r backend/requirements.txt
+    buildCommand: pip install -r backend/requirements.txt && bash scripts/train_all.sh && python -m backend.utils.cache_builder && bash scripts/build_edge_assets.sh
     startCommand: python -m uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT --loop asyncio
     healthCheckPath: /health
     autoDeploy: true
