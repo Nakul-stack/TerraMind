@@ -18,9 +18,25 @@ logger = logging.getLogger(__name__)
 
 # ── Artifact paths (project-relative) ────────────────────────────────────────
 _PROJECT_ROOT = Path(__file__).resolve().parents[3]  # …/TerraMind-Smarter-Farming-Every-Stage
-_ARTIFACTS_DIR = _PROJECT_ROOT / "ml" / "post_symptom_diagnosis" / "saved_models" / "trained_artifacts_fast"
-_TORCHSCRIPT_PATH = _ARTIFACTS_DIR / "plant_disease_model_fast_torchscript.pt"
-_METADATA_PATH = _ARTIFACTS_DIR / "class_metadata_fast.json"
+_ARTIFACT_DIR_CANDIDATES = [
+    _PROJECT_ROOT / "ml" / "post_symptom_diagnosis" / "saved_models" / "trained_artifacts_fast",
+    _PROJECT_ROOT / "trained_artifacts_fast",
+]
+
+
+def _resolve_artifact_paths() -> tuple[Path, Path]:
+    for base in _ARTIFACT_DIR_CANDIDATES:
+        ts = base / "plant_disease_model_fast_torchscript.pt"
+        meta = base / "class_metadata_fast.json"
+        if ts.exists() and meta.exists():
+            return ts, meta
+
+    # Return primary expected path to preserve clear error messages.
+    base = _ARTIFACT_DIR_CANDIDATES[0]
+    return base / "plant_disease_model_fast_torchscript.pt", base / "class_metadata_fast.json"
+
+
+_TORCHSCRIPT_PATH, _METADATA_PATH = _resolve_artifact_paths()
 # Optional fallback (not used for primary inference):
 # _PTH_PATH = _ARTIFACTS_DIR / "best_plant_disease_model_fast.pth"
 

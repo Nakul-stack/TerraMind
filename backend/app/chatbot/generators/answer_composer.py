@@ -22,6 +22,20 @@ REASONING STRATEGY DETECTED: {strategy} ({reason})
 Generate your expert, natural response:
 """
 
+
+def _context_fallback_answer(context_text: str) -> str:
+    """Build a concise fallback answer directly from retrieved context."""
+    cleaned = " ".join(context_text.split())
+    if not cleaned:
+        return "I don't have enough information about that right now."
+
+    # Keep response compact and deterministic for UI reliability.
+    preview = cleaned[:900]
+    return (
+        "I could not reach the language model right now, but here is the relevant information I found:\n\n"
+        f"{preview}"
+    )
+
 async def compose_answer(user_query: str, context: RetrieverContext, routing_decision: RoutingDecision) -> str:
     if not context.text_content.strip():
         return "I don't have enough information about that right now."
@@ -39,4 +53,4 @@ async def compose_answer(user_query: str, context: RetrieverContext, routing_dec
         return answer.strip()
     except OllamaError as exc:
         logger.error(f"Failed to generate final answer: {exc}")
-        return "I encountered an error while synthesizing the answer. Please try again."
+        return _context_fallback_answer(context.text_content)
